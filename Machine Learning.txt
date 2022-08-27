@@ -1,0 +1,133 @@
+Movie Recomendation System 
+
+What is Recomendation ?
+
+Recommendation engines are a subclass of machine learning which generally deal with ranking or 
+rating products / users. Loosely defined, a recommender system is a system which predicts ratings a
+user might give to a specific item. These predictions will then be ranked and returned back to the user.
+
+Types of Recomendation:
+
+1.Content Based:-Content-based filtering uses item features to recommend other items similar to what the user likes, 
+	             based on their previous actions or explicit feedback.
+
+2.Collabarative Filltered:-Collaborative filtering is also known as social filtering.Collaborative filtering uses 
+		       algorithms to filter data from user reviews to make personalized recommendations for users 
+with similar preferences. Collaborative filtering is also used to select content and advertising for individuals on 
+social media.
+
+3.Hybrid:-Recommender systems are software tools used to generate and provide suggestions for items and other
+	entities to the users by exploiting various strategies. Hybrid recommender systems combine two or more 
+recommendation strategies in different ways to benefit from their complementary advantages.
+
+Collaborative vs content based
+
+a)Content based systems examine the properties of the item examined or recommended.
+
+b)These systems takes input from the user profile and the contextual parameters along with product features to make 
+the recommendation list.
+
+c)Similarity of items is determined by measuring the similarity in their properties.
+
+d)These systems need some information related to the content of available items, but no complete information.
+
+e)It also requires user profiling describing what user likes.
+
+f)In movie recommendation system- content based filtering systems will recommend the movie based on users profile 
+information like age, gender, etc as well as properties of movie like genre, actors, etc.
+
+
+The basic difference between Content based and Collabarative Filltered is 
+
+Content based : This algorithm recomended on basis of content .
+Collabarative Filltered: This algorithm recomended on basis of similarity between persons personality.
+
+Project Idea:
+	Data---> Preprocessing---> Model---> Website---> Depolyment 
+
+
+
+Vectorization:
+Text Vector
+Famous Technique
+	Bag of words-->Easiest technique
+	tf idf
+	word2vec
+	
+Bag of words:- Combine all the item in the specific column,then we divide it into a specific word with respect of frquency 
+	        of words. On the basis of higher frequency of words we recommend the movie to the subscriber.
+
+On performing Vectorisation there are few techniques that are:
+	a)Stop words:-Which means that the words are used for sentence formation which are not valid in sentence 
+		        meaning.For eg: are,of,from,is etc etc.
+
+
+import nltk: Used in natural language processing
+
+
+Euclidean distance: The Euclidean distance is defined as the distance between two points. In other words, the Euclidean 
+	               distance between two points in the Euclidean space is defined as the length of the line segment 
+	                between two points.
+
+Cosine Distance: Cosine distance measures the similarity between two vectors of an inner product space. It is measured 
+	           by the cosine of the angle between two vectors and determines whether two vectors are pointing in 
+	           roughly the same direction. It is often used to measure document similarity in text analysis.
+
+Euclidean distance Vs Cosine Distance
+
+The Euclidean distance corresponds to the L2-norm of a difference between vectors. The cosine similarity is 
+proportional to the dot product of two vectors and inversely proportional to the product of their magnitudes.
+
+
+
+
+We are using Cosine distance in this project as we have knew that in cosine distance the distance is inversely 
+proprotional to the Similarity.
+
+
+
+For run the Project in website 
+we write in the website
+	streamlit run app.py
+
+
+import streamlit as st
+import pickle
+import pandas as pd
+
+def recommend(movie):
+    movie_index = movies[movies['title'] == movie].index[0]
+    distances = similarity[movie_index]
+    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+    recommended_movies=[]
+    for i in movie_list:
+        recommended_movies.append(movies.iloc[i[0]].title)
+    return recommended_movies
+movies_dict = pickle.load(open('moviesdict.pkl','rb'))
+movies = pd.DataFrame(movies_dict)
+
+similarity=pickle.load(open('similarity.pkl','rb'))
+
+st.title("Movie Recommender System")
+
+selected_movie_name = st.selectbox(
+'Please Select a Movie',
+(movies['title'].values))
+
+if st.button('Recommend'):
+    recommendation = recommend(selected_movie_name)
+    for i in recommendation:
+        st.write(i)
+
+
+
+
+
+How to activate virtual environment ?
+ .\venv\Scripts\Activate.ps1
+	or
+ven+tab+tab+tab
+
+
+How to create virtual environment ?
+python -m virtualenv venv
